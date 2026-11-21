@@ -1,0 +1,2293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>A Private Gift for Aprajita ✨</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #090a14;
+      --bg-radial: #18142c;
+      --accent-pink: #ff4d8d;
+      --accent-gold: #ffd166;
+      --glass-bg: rgba(255, 255, 255, 0.06);
+      --glass-border: rgba(255, 255, 255, 0.14);
+      --text-main: #ffffff;
+      --text-muted: #a8adc4;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: radial-gradient(circle at 50% 30%, var(--bg-radial), var(--bg-dark) 80%);
+      color: var(--text-main);
+      height: 100dvh;
+      width: 100vw;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Ambient Starfield */
+    #starfield {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Confetti Overlay Canvas */
+    #confettiCanvas {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 60;
+      pointer-events: none;
+    }
+
+    /* Floating Music Button */
+    .music-btn {
+      position: fixed;
+      top: 18px;
+      right: 18px;
+      z-index: 100;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(10px);
+      color: var(--text-main);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+
+    .music-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      transform: scale(1.06);
+    }
+
+    /* Scene Manager */
+    .scene {
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.7s ease, transform 0.7s ease;
+      transform: scale(0.98);
+    }
+
+    .scene.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+    }
+
+    /* Shared Action Buttons */
+    .primary-btn {
+      padding: 13px 28px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      background: linear-gradient(135deg, var(--accent-pink), #ff758f);
+      color: #fff;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.95rem;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      cursor: pointer;
+      box-shadow: 0 10px 28px rgba(255, 77, 141, 0.4);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.4s ease;
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-2px) scale(1.03);
+      box-shadow: 0 14px 34px rgba(255, 77, 141, 0.55);
+    }
+
+    .primary-btn:active {
+      transform: scale(0.96);
+    }
+
+    .ghost-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      color: var(--text-muted);
+      padding: 10px 20px;
+      border-radius: 999px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.85rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+
+    .ghost-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    /* ================= SCENE 1: PIN LOCK SCREEN ================= */
+    .lock-card {
+      width: 100%;
+      max-width: 360px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border-radius: 28px;
+      padding: 32px 24px 28px;
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+    }
+
+    .lock-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: rgba(255, 77, 141, 0.14);
+      border: 1px solid rgba(255, 77, 141, 0.35);
+      font-size: 1.4rem;
+      margin-bottom: 14px;
+      box-shadow: 0 0 24px rgba(255, 77, 141, 0.25);
+    }
+
+    .lock-subtitle {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 2.2px;
+      color: var(--accent-gold);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .lock-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.3rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #fff 30%, #ff9ec2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .lock-desc {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+    }
+
+    .pin-dots {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .pin-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      border: 2px solid rgba(255, 255, 255, 0.35);
+      background: transparent;
+      transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .pin-dot.filled {
+      background: var(--accent-pink);
+      border-color: var(--accent-pink);
+      transform: scale(1.2);
+      box-shadow: 0 0 12px rgba(255, 77, 141, 0.7);
+    }
+
+    .pin-dots.shake {
+      animation: shake 0.42s cubic-bezier(.36,.07,.19,.97) both;
+    }
+
+    @keyframes shake {
+      10%, 90% { transform: translate3d(-2px, 0, 0); }
+      20%, 80% { transform: translate3d(4px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-6px, 0, 0); }
+      40%, 60% { transform: translate3d(6px, 0, 0); }
+    }
+
+    .keypad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-width: 260px;
+      margin: 0 auto 18px;
+    }
+
+    .key {
+      height: 58px;
+      border-radius: 18px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-main);
+      font-size: 1.35rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.12s ease, background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .key:hover {
+      background: rgba(255, 255, 255, 0.11);
+      border-color: rgba(255, 255, 255, 0.22);
+    }
+
+    .key:active {
+      transform: scale(0.92);
+      background: rgba(255, 77, 141, 0.25);
+      border-color: var(--accent-pink);
+    }
+
+    .key.empty {
+      background: transparent;
+      border-color: transparent;
+      pointer-events: none;
+    }
+
+    .key.action {
+      font-size: 1.1rem;
+      color: var(--text-muted);
+    }
+
+    .hint-btn {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      cursor: pointer;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      transition: color 0.2s ease;
+    }
+
+    .hint-btn:hover {
+      color: var(--accent-gold);
+    }
+
+    .hint-box {
+      margin-top: 8px;
+      font-size: 0.82rem;
+      color: var(--accent-gold);
+      min-height: 18px;
+      opacity: 0;
+      transform: translateY(-4px);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .hint-box.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ================= SCENE 2: BOW & ARROW ================= */
+    #scene-bow {
+      padding: 0;
+      touch-action: none;
+    }
+
+    #bowCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      cursor: grab;
+    }
+
+    #bowCanvas:active {
+      cursor: grabbing;
+    }
+
+    .bow-ui {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      pointer-events: none;
+      z-index: 5;
+      width: 90%;
+    }
+
+    .bow-hint {
+      display: inline-block;
+      padding: 8px 18px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      backdrop-filter: blur(8px);
+      font-size: 0.88rem;
+      color: var(--accent-gold);
+      letter-spacing: 0.4px;
+      animation: pulseText 2s infinite ease-in-out;
+    }
+
+    @keyframes pulseText {
+      0%, 100% { opacity: 0.75; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.03); }
+    }
+
+    /* ================= SCENE 3: HEART TREE & TITLE REVEAL ================= */
+    #scene-tree {
+      padding: 0;
+      justify-content: space-between;
+    }
+
+    #treeCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .tree-header {
+      position: relative;
+      z-index: 5;
+      text-align: center;
+      margin-top: 54px;
+      padding: 0 20px;
+      opacity: 0;
+      transform: translateY(16px);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .tree-header.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .tree-kicker {
+      font-size: 0.8rem;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent-gold);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    .tree-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2.6rem, 7vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      background: linear-gradient(135deg, #ffffff 20%, #ff8fab 65%, #ffd166 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 6px 24px rgba(255, 77, 141, 0.35));
+    }
+
+    .tree-footer {
+      position: relative;
+      z-index: 5;
+      margin-bottom: 40px;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+
+    .tree-footer.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    /* ================= SCENE 4: STRAWBERRY BIRTHDAY CAKE ================= */
+    .cake-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .cake-status {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 2.2px;
+      color: var(--accent-gold);
+      font-weight: 600;
+      margin-bottom: 6px;
+      min-height: 20px;
+    }
+
+    .cake-heading {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 24px;
+      background: linear-gradient(135deg, #fff 25%, #ff8fab 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .cake-stage {
+      position: relative;
+      width: 280px;
+      height: 270px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      margin-bottom: 24px;
+      cursor: pointer;
+    }
+
+    .cake-glow {
+      position: absolute;
+      bottom: 20px;
+      width: 260px;
+      height: 120px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 117, 143, 0.32), transparent 70%);
+      pointer-events: none;
+      transition: opacity 0.6s ease;
+    }
+
+    .cake-part {
+      opacity: 0;
+      transform: translateY(-90px) scale(0.95);
+      transition: transform 0.65s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.45s ease;
+    }
+
+    .cake-part.dropped {
+      opacity: 1;
+      transform: translateY(0) scale(1);
+    }
+
+    .candle-group {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      z-index: 6;
+      margin-bottom: -4px;
+    }
+
+    .flame-wrap {
+      position: relative;
+      width: 26px;
+      height: 36px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      margin-bottom: 2px;
+      opacity: 0;
+      transform: scale(0.2);
+      transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .flame-wrap.lit {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .flame-halo {
+      position: absolute;
+      top: -12px;
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 209, 102, 0.55), rgba(255, 117, 143, 0) 70%);
+      animation: haloPulse 1.4s infinite alternate ease-in-out;
+    }
+
+    .flame {
+      width: 14px;
+      height: 24px;
+      background: radial-gradient(ellipse at 50% 80%, #fff 10%, #ffd166 55%, #ff6b35 100%);
+      border-radius: 50% 50% 50% 50% / 65% 65% 35% 35%;
+      box-shadow: 0 0 14px #ffd166, 0 0 28px #ff8fab;
+      animation: flicker 0.16s infinite alternate ease-in-out;
+      transform-origin: bottom center;
+    }
+
+    @keyframes flicker {
+      0% { transform: scale(1) rotate(-2deg); }
+      100% { transform: scale(1.06, 0.94) rotate(2deg); }
+    }
+
+    @keyframes haloPulse {
+      0% { transform: scale(0.9); opacity: 0.7; }
+      100% { transform: scale(1.18); opacity: 1; }
+    }
+
+    .smoke {
+      position: absolute;
+      bottom: 8px;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.55);
+      filter: blur(3px);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .smoke.rising {
+      animation: smokeRise 1.6s ease-out forwards;
+    }
+
+    @keyframes smokeRise {
+      0% { opacity: 0.75; transform: translateY(0) scale(0.8); }
+      100% { opacity: 0; transform: translateY(-55px) translateX(12px) scale(2.4); }
+    }
+
+    .candle-stick {
+      width: 12px;
+      height: 44px;
+      border-radius: 6px;
+      background: repeating-linear-gradient(
+        -45deg,
+        #fff,
+        #fff 5px,
+        #ff4d8d 5px,
+        #ff4d8d 10px
+      );
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.35);
+    }
+
+    .cake-top {
+      position: relative;
+      width: 164px;
+      height: 54px;
+      border-radius: 18px 18px 10px 10px;
+      background: linear-gradient(180deg, #ff8fab 0%, #fb6f92 100%);
+      box-shadow: inset 0 -6px 0 rgba(190, 30, 80, 0.25), 0 6px 16px rgba(0, 0, 0, 0.3);
+      z-index: 5;
+      margin-bottom: -6px;
+      overflow: visible;
+    }
+
+    .cake-top::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 18px;
+      border-radius: 18px 18px 12px 12px;
+      background: #fff5f7;
+      box-shadow: 0 4px 0 #ffd6e0;
+    }
+
+    .drip {
+      position: absolute;
+      top: 12px;
+      width: 14px;
+      background: #fff5f7;
+      border-radius: 0 0 10px 10px;
+    }
+
+    .berry {
+      position: absolute;
+      top: -9px;
+      width: 15px;
+      height: 16px;
+      border-radius: 50% 50% 45% 45%;
+      background: radial-gradient(circle at 35% 30%, #ff4d6d, #a4133c);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    }
+
+    .cake-filling {
+      width: 196px;
+      height: 12px;
+      border-radius: 8px;
+      background: #fff0f3;
+      z-index: 4;
+      margin-bottom: -4px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+    }
+
+    .cake-bottom {
+      position: relative;
+      width: 204px;
+      height: 68px;
+      border-radius: 16px 16px 14px 14px;
+      background: linear-gradient(180deg, #ff758f 0%, #e05780 100%);
+      box-shadow: inset 0 -8px 0 rgba(164, 19, 60, 0.28), 0 10px 24px rgba(0, 0, 0, 0.45);
+      z-index: 3;
+      overflow: hidden;
+    }
+
+    .cake-bottom::after {
+      content: "•  •  •  •  •  •  •";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      transform: translateY(-50%);
+      color: rgba(255, 240, 243, 0.85);
+      font-size: 1.2rem;
+      letter-spacing: 6px;
+    }
+
+    .cake-plate {
+      width: 248px;
+      height: 16px;
+      border-radius: 999px;
+      background: linear-gradient(180deg, #ffffff 0%, #d8dce8 100%);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.6);
+      z-index: 2;
+      margin-top: -2px;
+    }
+
+    .cake-prompt {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      min-height: 24px;
+      margin-bottom: 18px;
+      transition: color 0.3s ease;
+    }
+
+    .cake-prompt.highlight {
+      color: var(--accent-gold);
+      font-weight: 600;
+      animation: pulseText 1.8s infinite ease-in-out;
+    }
+
+    .cake-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      min-height: 48px;
+    }
+
+    /* ================= SCENE 5: POP THE 5 BALLOONS ================= */
+    .balloons-wrap {
+      width: 100%;
+      max-width: 440px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .balloons-kicker {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2.2px;
+      color: var(--accent-gold);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .balloons-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      background: linear-gradient(135deg, #fff 25%, #ff8fab 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .balloon-arena {
+      position: relative;
+      width: 100%;
+      height: 250px;
+      margin-bottom: 14px;
+    }
+
+    .balloon-item {
+      position: absolute;
+      width: 72px;
+      height: 136px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+      animation: balloonBob 3.2s infinite ease-in-out;
+    }
+
+    .balloon-item:hover {
+      transform: scale(1.12) translateY(-4px);
+    }
+
+    .balloon-item.popped {
+      transform: scale(1.65);
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    @keyframes balloonBob {
+      0%, 100% { margin-top: 0px; }
+      50% { margin-top: -12px; }
+    }
+
+    .balloon-body {
+      width: 68px;
+      height: 80px;
+      border-radius: 50% 50% 50% 50% / 44% 44% 56% 56%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: inset -7px -10px 16px rgba(0, 0, 0, 0.25), 0 12px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .balloon-body::before {
+      content: "";
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      width: 13px;
+      height: 22px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.45);
+      transform: rotate(25deg);
+    }
+
+    .balloon-body::after {
+      content: "";
+      position: absolute;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 8px solid currentColor;
+    }
+
+    .balloon-string {
+      width: 2px;
+      height: 50px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.55), transparent);
+      margin-top: 5px;
+    }
+
+    .reason-card {
+      width: 100%;
+      min-height: 116px;
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-radius: 22px;
+      padding: 18px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 18px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    .reason-card.pop-in {
+      animation: cardPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes cardPop {
+      0% { transform: scale(0.92); }
+      60% { transform: scale(1.03); }
+      100% { transform: scale(1); }
+    }
+
+    .reason-badge {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: var(--accent-gold);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .reason-text {
+      font-size: 0.98rem;
+      line-height: 1.5;
+      color: var(--text-main);
+    }
+
+    /* ================= SCENE 6: SEALED WAX ENVELOPE & LETTER ================= */
+    .letter-stage {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .envelope-kicker {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2.2px;
+      color: var(--accent-gold);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .envelope-heading {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.35rem;
+      font-weight: 700;
+      margin-bottom: 22px;
+      background: linear-gradient(135deg, #fff 25%, #ffd166 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .envelope-box {
+      position: relative;
+      width: 300px;
+      height: 195px;
+      background: linear-gradient(145deg, #f3e5d0, #e2ccb0);
+      border-radius: 16px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65), inset 0 0 0 2px rgba(212, 175, 55, 0.45);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      transition: transform 0.35s ease, opacity 0.5s ease;
+    }
+
+    .envelope-box:hover {
+      transform: translateY(-4px) scale(1.02);
+    }
+
+    .env-flap-top {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 150px solid transparent;
+      border-right: 150px solid transparent;
+      border-top: 108px solid #d8be9e;
+      transform-origin: top center;
+      transition: transform 0.65s ease;
+      z-index: 3;
+      filter: drop-shadow(0 4px 6px rgba(0,0,0,0.18));
+    }
+
+    .envelope-box.opened .env-flap-top {
+      transform: rotateX(180deg);
+    }
+
+    .env-pocket-left {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-bottom: 105px solid #e8d5bc;
+      border-right: 165px solid transparent;
+      z-index: 2;
+    }
+
+    .env-pocket-right {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 0;
+      height: 0;
+      border-bottom: 105px solid #dec7a8;
+      border-left: 165px solid transparent;
+      z-index: 2;
+    }
+
+    .wax-seal {
+      position: relative;
+      z-index: 4;
+      width: 62px;
+      height: 62px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 30%, #e63946, #9e0b22);
+      border: 3px solid rgba(255, 209, 102, 0.55);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45), inset 0 2px 6px rgba(255, 255, 255, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #ffd166;
+      transition: transform 0.35s ease, opacity 0.35s ease;
+      animation: sealPulse 2s infinite ease-in-out;
+    }
+
+    @keyframes sealPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.07); }
+    }
+
+    .envelope-box.opened .wax-seal {
+      transform: scale(1.4);
+      opacity: 0;
+    }
+
+    .stationery-card {
+      display: none;
+      width: 100%;
+      background: #fffdf7;
+      color: #2b2420;
+      border-radius: 20px;
+      padding: 26px 22px 22px;
+      text-align: left;
+      box-shadow: 0 24px 65px rgba(0, 0, 0, 0.65);
+      border: 1px solid #eadbc8;
+      background-image: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 27px,
+        rgba(212, 175, 55, 0.22) 28px
+      );
+      animation: paperSlideUp 0.65s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+    }
+
+    .stationery-card.visible {
+      display: block;
+    }
+
+    @keyframes paperSlideUp {
+      0% { opacity: 0; transform: translateY(34px) scale(0.95); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .letter-salutation {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.85rem;
+      font-weight: 700;
+      color: #b51748;
+      margin-bottom: 10px;
+    }
+
+    .letter-content {
+      font-size: 0.96rem;
+      line-height: 28px;
+      color: #3a302c;
+      min-height: 140px;
+      white-space: pre-wrap;
+    }
+
+    .cursor-blink {
+      display: inline-block;
+      width: 2px;
+      height: 1.05em;
+      background: #b51748;
+      vertical-align: text-bottom;
+      margin-left: 2px;
+      animation: blink 0.8s infinite;
+    }
+
+    @keyframes blink {
+      0%, 49% { opacity: 1; }
+      50%, 100% { opacity: 0; }
+    }
+
+    .letter-signoff {
+      margin-top: 14px;
+      text-align: right;
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: #b51748;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+
+    .letter-signoff.visible {
+      opacity: 1;
+    }
+
+    .letter-controls {
+      margin-top: 18px;
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* ================= SCENE 7: FULL DECORATIVE KITTEN VIDEO ================= */
+    #scene-video {
+      padding: 16px;
+    }
+
+    .video-decor-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Ambient Glowing Aura behind video */
+    .video-decor-wrapper::before {
+      content: "";
+      position: absolute;
+      inset: -18px;
+      border-radius: 38px;
+      background: radial-gradient(circle, rgba(255, 77, 141, 0.35), rgba(255, 209, 102, 0.16) 55%, transparent 75%);
+      z-index: 0;
+      pointer-events: none;
+      animation: haloPulse 2.4s infinite alternate ease-in-out;
+    }
+
+    .video-frame {
+      position: relative;
+      z-index: 1;
+      width: min(330px, 84vw);
+      aspect-ratio: 9 / 16;
+      max-height: 78dvh;
+      border-radius: 28px;
+      overflow: hidden;
+      background: #121024;
+      border: 2px solid rgba(255, 209, 102, 0.38);
+      box-shadow: 0 28px 70px rgba(0, 0, 0, 0.78), 0 0 40px rgba(255, 77, 141, 0.3);
+    }
+
+    .video-frame video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
+
+    /* Floating corner decorations around the video card */
+    .vid-sparkle {
+      position: absolute;
+      z-index: 2;
+      font-size: 1.55rem;
+      pointer-events: none;
+      filter: drop-shadow(0 4px 12px rgba(255, 77, 141, 0.5));
+      animation: decorFloat 2.8s infinite ease-in-out;
+    }
+
+    .vid-sparkle.tl { top: -14px; left: -12px; animation-delay: 0s; }
+    .vid-sparkle.tr { top: -12px; right: -14px; animation-delay: 0.6s; }
+    .vid-sparkle.bl { bottom: -12px; left: -14px; animation-delay: 1.2s; }
+    .vid-sparkle.br { bottom: -14px; right: -12px; animation-delay: 1.8s; }
+
+    @keyframes decorFloat {
+      0%, 100% { transform: translateY(0) scale(1) rotate(-6deg); }
+      50% { transform: translateY(-7px) scale(1.12) rotate(6deg); }
+    }
+
+    /* ================= SCENE 8: GRAND FINALE WITH CAT IMAGE ================= */
+    .finale-card {
+      width: 100%;
+      max-width: 390px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .cat-mascot-wrap {
+      position: relative;
+      width: 220px;
+      height: 240px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+      animation: catFloat 3s infinite ease-in-out;
+    }
+
+    .cat-mascot-wrap::before {
+      content: "";
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(255, 77, 141, 0.36), rgba(255, 209, 102, 0.14) 55%, transparent 75%);
+      z-index: 0;
+    }
+
+    .cat-mascot-img {
+      position: relative;
+      z-index: 1;
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.55));
+    }
+
+    @keyframes catFloat {
+      0%, 100% { transform: translateY(0px) rotate(-1.5deg); }
+      50% { transform: translateY(-10px) rotate(1.5deg); }
+    }
+
+    .finale-kicker {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 2.5px;
+      color: var(--accent-gold);
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .finale-title {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2.6rem, 8vw, 3.6rem);
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #ffffff 20%, #ff8fab 65%, #ffd166 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      filter: drop-shadow(0 6px 24px rgba(255, 77, 141, 0.4));
+    }
+
+    .finale-sub {
+      font-size: 0.96rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background Starfield -->
+  <canvas id="starfield"></canvas>
+  <!-- Confetti Overlay -->
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- Background Audio -->
+  <audio id="bgMusic" loop preload="auto">
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+  <button class="music-btn" id="musicToggle" title="Toggle Music" aria-label="Toggle Music">🔇</button>
+
+  <!-- SCENE 1: PIN LOCK SCREEN -->
+  <section class="scene active" id="scene-pin">
+    <div class="lock-card">
+      <div class="lock-badge">🔒</div>
+      <div class="lock-subtitle"></div>
+      <h1 class="lock-title" id="recipientHeading">A Gift for Aprajita</h1>
+      <p class="lock-desc">Enter the 4-digit passcode to unlock</p>
+
+      <div class="pin-dots" id="pinDots">
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+        <span class="pin-dot"></span>
+      </div>
+
+      <div class="keypad" id="keypad">
+        <button class="key" data-num="1">1</button>
+        <button class="key" data-num="2">2</button>
+        <button class="key" data-num="3">3</button>
+        <button class="key" data-num="4">4</button>
+        <button class="key" data-num="5">5</button>
+        <button class="key" data-num="6">6</button>
+        <button class="key" data-num="7">7</button>
+        <button class="key" data-num="8">8</button>
+        <button class="key" data-num="9">9</button>
+        <button class="key empty"></button>
+        <button class="key" data-num="0">0</button>
+        <button class="key action" id="backspaceBtn" aria-label="Delete">⌫</button>
+      </div>
+
+      <button class="hint-btn" id="hintToggle">Need a hint?</button>
+      <div class="hint-box" id="hintBox"></div>
+    </div>
+  </section>
+
+  <!-- SCENE 2: BOW & ARROW -->
+  <section class="scene" id="scene-bow">
+    <canvas id="bowCanvas"></canvas>
+    <div class="bow-ui">
+      <div class="bow-hint" id="bowHintText">🏹 Pull the bowstring back & release into the heart... well thats mine</div>
+    </div>
+  </section>
+
+  <!-- SCENE 3: TITLE REVEAL & BLOOMING HEART TREE -->
+  <section class="scene" id="scene-tree">
+    <canvas id="treeCanvas"></canvas>
+    <div class="tree-header" id="treeHeader">
+      <div class="tree-kicker">✨ It's officially your day ✨</div>
+      <h1 class="tree-title" id="treeTitle">Happy Birthday Aprajita</h1>
+    </div>
+    <div class="tree-footer" id="treeFooter">
+      <button class="primary-btn" id="toCakeBtn">Click...🎂</button>
+    </div>
+  </section>
+
+  <!-- SCENE 4: STRAWBERRY BIRTHDAY CAKE -->
+  <section class="scene" id="scene-cake">
+    <div class="cake-wrapper">
+      <div class="cake-status" id="cakeStatus">Baking something sweet...</div>
+      <h2 class="cake-heading" id="cakeHeading">Love you so much bebo 🍓</h2>
+
+      <div class="cake-stage" id="cakeStage" title="Tap candle to blow out">
+        <div class="cake-glow"></div>
+
+        <div class="candle-group cake-part" id="part-candle">
+          <div class="flame-wrap" id="flameWrap">
+            <div class="flame-halo"></div>
+            <div class="flame"></div>
+          </div>
+          <div class="smoke" id="smokeWisp"></div>
+          <div class="candle-stick"></div>
+        </div>
+
+        <div class="cake-top cake-part" id="part-top">
+          <div class="berry" style="left: 22px;"></div>
+          <div class="berry" style="left: 74px;"></div>
+          <div class="berry" style="right: 22px;"></div>
+          <div class="drip" style="left: 16px; height: 18px;"></div>
+          <div class="drip" style="left: 48px; height: 24px;"></div>
+          <div class="drip" style="left: 96px; height: 20px;"></div>
+          <div class="drip" style="right: 20px; height: 22px;"></div>
+        </div>
+
+        <div class="cake-filling cake-part" id="part-filling"></div>
+        <div class="cake-bottom cake-part" id="part-bottom"></div>
+        <div class="cake-plate cake-part" id="part-plate"></div>
+      </div>
+
+      <p class="cake-prompt" id="cakePrompt">Adding fresh strawberries & cream...</p>
+
+      <div class="cake-actions" id="cakeActions">
+        <button class="primary-btn" id="blowWishBtn" style="display: none;">🌬️</button>
+        <button class="primary-btn" id="toBalloonsBtn" style="display: none;">🎈</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 5: POP THE 5 BALLOONS -->
+  <section class="scene" id="scene-balloons">
+    <div class="balloons-wrap">
+      <div class="balloons-kicker" id="balloonCounter">Pop the balloons</div>
+      <h2 class="balloons-title">5 ballons, Each one holds a reason you're loved.</h2>
+
+      <div class="balloon-arena" id="balloonArena"></div>
+
+      <div class="reason-card" id="reasonCard">
+        <div class="reason-badge" id="reasonBadge">Each balloon holds a little note</div>
+        <div class="reason-text" id="reasonText">Reasons you ask me for everytime✨</div>
+      </div>
+
+      <button class="primary-btn" id="toLetterBtn" style="display: none;">💌</button>
+    </div>
+  </section>
+
+  <!-- SCENE 6: SEALED WAX ENVELOPE & TYPEWRITER LETTER -->
+  <section class="scene" id="scene-letter">
+    <div class="letter-stage">
+      <div class="envelope-kicker" id="letterKicker">A Note From your Aakrit</div>
+      <h2 class="envelope-heading" id="letterHeading">Tap the Wax Seal to Open</h2>
+
+      <div class="envelope-box" id="envelopeBox">
+        <div class="env-flap-top"></div>
+        <div class="env-pocket-left"></div>
+        <div class="env-pocket-right"></div>
+        <div class="wax-seal" id="waxSeal">A</div>
+      </div>
+
+      <div class="stationery-card" id="stationeryCard">
+        <div class="letter-salutation" id="letterSalutation">Dear Aprajita,</div>
+        <div class="letter-content"><span id="typedBody"></span><span class="cursor-blink" id="typeCursor"></span></div>
+        <div class="letter-signoff" id="letterSignoff">With love, Aakrit ❤️</div>
+      </div>
+
+      <div class="letter-controls">
+        <button class="primary-btn" id="toVideoBtn" style="display: none;">🐾</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 7: DECORATIVE FULL-PAGE KITTEN BAND VIDEO (NO TAGLINES, NO PLAYER CONTROLS, NO SKIP) -->
+  <section class="scene" id="scene-video">
+    <div class="video-decor-wrapper">
+      <span class="vid-sparkle tl">✨</span>
+      <span class="vid-sparkle tr">💖</span>
+      <span class="vid-sparkle bl">🎶</span>
+      <span class="vid-sparkle br">🐾</span>
+
+      <div class="video-frame">
+        <video id="surpriseVideo" playsinline preload="auto">
+          <source src="video_1.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCENE 8: GRAND FINALE WITH CAT IMAGE -->
+  <section class="scene" id="scene-finale">
+    <div class="finale-card">
+      <div class="cat-mascot-wrap">
+        <img src="download.png" alt="Cute birthday cat with flowers" class="cat-mascot-img" id="finaleCatImg" />
+      </div>
+
+      <div class="finale-kicker">✨ Wishing You The Best Year ✨</div>
+      <h1 class="finale-title" id="finaleTitle">Happy Birthday Aprajita!</h1>
+      <p class="finale-sub" id="finaleSub">❤️</p>
+
+      <button class="ghost-btn" id="replayBtn">Replay↻</button>
+    </div>
+  </section>
+
+  <script>
+    /* =====================================================================
+       EASY CUSTOMIZATION CONFIG
+       ===================================================================== */
+    const CONFIG = {
+      recipientName: "Aprajita",
+      senderName: "Aakrit",
+      pinCode: "2211",
+      pinHint: "Hint: The date we met for first time (DDMM)",
+
+      balloonReasons: [
+        "Your smile that instantly brightens my toughest days.",
+        "The way you care so deeply about me.",
+        "Your phuckin kindness.",
+        "Every ordinary moment feels special with you",
+        "Sabse Zyada to apki Cuteness"
+      ],
+      letterTitle: "Dear Appu,",
+      letterBody: "Happy Birthday Babyyyyyy 🎊! Hmmm... to aaj aapka birthday h 😏... yaar 19 ki ho gyi 🥳... Ek saal pehle hi mile the waise 😏... is birthday pe mast khush khush rehna yaar faltu k ye wo soch k aap faltu ki tension mat lia kro aur mast rha kro aur rehna 💋💋 lekin yaar apka birthday h still me kuch nhi kr paya socha sach me bahut kuch tha ki is baar IRL kya kya celebrate krunga but sab fuck up ho gya, aaj k liye bhi bahut kuch socha tha lekin choro baad me kr lenge... aur baki ab kya bolun samjh nhi aa rha ab 😭... chi yaar likhte likhte samjh hi nhi aata kya likho aur man me bahut kuch hota h aao yaar aapko 💋 du... baki chal hatt zyada chipku chipku ho gya 🤢 phuck you bih 🖕🏿 ... love you so muchhhhhhh 💋💋💋💋💋",
+
+      // Local media filenames in the exact same folder as index.html
+      videoFile: "video_1.mp4",
+      catImageFile: "download.png",
+      musicFile: "music.mp3"
+    };
+
+    /* ================= AMBIENT STARFIELD ================= */
+    const starCanvas = document.getElementById('starfield');
+    const sCtx = starCanvas.getContext('2d');
+    let stars = [];
+
+    function initStars() {
+      starCanvas.width = window.innerWidth;
+      starCanvas.height = window.innerHeight;
+      stars = Array.from({ length: 95 }, () => ({
+        x: Math.random() * starCanvas.width,
+        y: Math.random() * starCanvas.height,
+        r: Math.random() * 1.5 + 0.3,
+        alpha: Math.random(),
+        speed: Math.random() * 0.015 + 0.004
+      }));
+    }
+
+    function animateStars() {
+      sCtx.clearRect(0, 0, starCanvas.width, starCanvas.height);
+      for (const s of stars) {
+        s.alpha += s.speed;
+        const opacity = 0.25 + Math.abs(Math.sin(s.alpha)) * 0.75;
+        sCtx.fillStyle = `rgba(255, 255, 255, ${opacity})`;
+        sCtx.beginPath();
+        sCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        sCtx.fill();
+      }
+      requestAnimationFrame(animateStars);
+    }
+
+    window.addEventListener('resize', initStars);
+    initStars();
+    animateStars();
+
+    /* ================= REUSABLE CONFETTI SYSTEM ================= */
+    const confettiCanvas = document.getElementById('confettiCanvas');
+    const cCtx = confettiCanvas.getContext('2d');
+    let confettiPieces = [];
+    let confettiRunning = false;
+
+    function launchConfetti(count = 110, originX = null, originY = null) {
+      confettiCanvas.width = window.innerWidth;
+      confettiCanvas.height = window.innerHeight;
+      const palette = ['#ff4d8d', '#ff8fab', '#ffd166', '#ffffff', '#ff758f', '#ffb3c6'];
+      const cx = originX !== null ? originX : confettiCanvas.width * 0.5;
+      const cy = originY !== null ? originY : confettiCanvas.height * 0.48;
+
+      for (let i = 0; i < count; i++) {
+        confettiPieces.push({
+          x: cx + (Math.random() - 0.5) * 60,
+          y: cy,
+          vx: (Math.random() - 0.5) * 14,
+          vy: -Math.random() * 12 - 3,
+          size: Math.random() * 8 + 5,
+          color: palette[Math.floor(Math.random() * palette.length)],
+          rotation: Math.random() * 360,
+          rotSpeed: (Math.random() - 0.5) * 12
+        });
+      }
+
+      if (!confettiRunning) {
+        confettiRunning = true;
+        requestAnimationFrame(loopConfetti);
+      }
+    }
+
+    function loopConfetti() {
+      cCtx.clearRect(0, 0, confettiCanvas.width, confettiCanvas.height);
+      for (let i = confettiPieces.length - 1; i >= 0; i--) {
+        const p = confettiPieces[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.32;
+        p.vx *= 0.99;
+        p.rotation += p.rotSpeed;
+        if (p.y > confettiCanvas.height + 20) {
+          confettiPieces.splice(i, 1);
+          continue;
+        }
+        cCtx.save();
+        cCtx.translate(p.x, p.y);
+        cCtx.rotate((p.rotation * Math.PI) / 180);
+        cCtx.fillStyle = p.color;
+        cCtx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+        cCtx.restore();
+      }
+      if (confettiPieces.length > 0) {
+        requestAnimationFrame(loopConfetti);
+      } else {
+        confettiRunning = false;
+      }
+    }
+
+    /* ================= MUSIC CONTROLLER ================= */
+    const bgMusic = document.getElementById('bgMusic');
+    const musicToggle = document.getElementById('musicToggle');
+    let isPlaying = false;
+    let wasPlayingBeforeVideo = false;
+
+    function tryStartMusic() {
+      if (isPlaying) return;
+      bgMusic.play().then(() => {
+        isPlaying = true;
+        musicToggle.textContent = '🔊';
+      }).catch(() => {});
+    }
+
+    musicToggle.addEventListener('click', () => {
+      if (isPlaying) {
+        bgMusic.pause();
+        isPlaying = false;
+        musicToggle.textContent = '🔇';
+      } else {
+        tryStartMusic();
+      }
+    });
+
+    /* ================= SCENE SWITCHER ================= */
+    function goToScene(sceneId) {
+      document.querySelectorAll('.scene').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById(sceneId);
+      if (target) target.classList.add('active');
+    }
+
+    /* ================= POPULATE PERSONALIZED LABELS ================= */
+    document.getElementById('recipientHeading').textContent = `A Gift for ${CONFIG.recipientName}`;
+    document.getElementById('treeTitle').textContent = `Happy Birthday ${CONFIG.recipientName}`;
+    document.getElementById('letterKicker').textContent = `A Note From yourㅤ${CONFIG.senderName}`;
+    document.getElementById('waxSeal').textContent = CONFIG.senderName.charAt(0).toUpperCase();
+    document.getElementById('letterSalutation').textContent = CONFIG.letterTitle;
+    document.getElementById('letterSignoff').textContent = `With love, ${CONFIG.senderName} ❤️`;
+    document.getElementById('finaleTitle').textContent = `Happy Birthday ${CONFIG.recipientName}!`;
+    document.getElementById('finaleCatImg').src = CONFIG.catImageFile;
+    document.title = `A Private Gift for ${CONFIG.recipientName} ✨`;
+
+    /* ================= SCENE 1: PIN LOGIC ================= */
+    const hintBox = document.getElementById('hintBox');
+    hintBox.textContent = CONFIG.pinHint;
+    document.getElementById('hintToggle').addEventListener('click', () => {
+      hintBox.classList.toggle('visible');
+    });
+
+    let enteredPin = "";
+    const dots = document.querySelectorAll('#pinDots .pin-dot');
+    const pinDotsContainer = document.getElementById('pinDots');
+
+    function updateDots() {
+      dots.forEach((dot, idx) => {
+        dot.classList.toggle('filled', idx < enteredPin.length);
+      });
+    }
+
+    function handleDigit(num) {
+      if (enteredPin.length >= 4) return;
+      enteredPin += num;
+      updateDots();
+
+      if (enteredPin.length === 4) {
+        if (enteredPin === CONFIG.pinCode) {
+          tryStartMusic();
+          setTimeout(() => {
+            goToScene('scene-bow');
+            startBowScene();
+          }, 260);
+        } else {
+          pinDotsContainer.classList.remove('shake');
+          void pinDotsContainer.offsetWidth;
+          pinDotsContainer.classList.add('shake');
+          setTimeout(() => {
+            enteredPin = "";
+            updateDots();
+          }, 420);
+        }
+      }
+    }
+
+    document.querySelectorAll('.key[data-num]').forEach(btn => {
+      btn.addEventListener('click', () => handleDigit(btn.dataset.num));
+    });
+
+    document.getElementById('backspaceBtn').addEventListener('click', () => {
+      if (enteredPin.length > 0) {
+        enteredPin = enteredPin.slice(0, -1);
+        updateDots();
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (!document.getElementById('scene-pin').classList.contains('active')) return;
+      if (e.key >= '0' && e.key <= '9') handleDigit(e.key);
+      if (e.key === 'Backspace') {
+        enteredPin = enteredPin.slice(0, -1);
+        updateDots();
+      }
+    });
+
+    /* ================= HELPER: DRAW HEART SHAPE ================= */
+    function drawHeart(ctx, x, y, size, color, glow = 0) {
+      ctx.save();
+      ctx.translate(x, y);
+      if (glow > 0) {
+        ctx.shadowColor = color;
+        ctx.shadowBlur = glow;
+      }
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      const topCurveHeight = size * 0.3;
+      ctx.moveTo(0, topCurveHeight);
+      ctx.bezierCurveTo(0, 0, -size / 2, 0, -size / 2, topCurveHeight);
+      ctx.bezierCurveTo(-size / 2, (size + topCurveHeight) / 2, 0, (size + topCurveHeight) / 1.15, 0, size);
+      ctx.bezierCurveTo(0, (size + topCurveHeight) / 1.15, size / 2, (size + topCurveHeight) / 2, size / 2, topCurveHeight);
+      ctx.bezierCurveTo(size / 2, 0, 0, 0, 0, topCurveHeight);
+      ctx.closePath();
+      ctx.fill();
+      ctx.restore();
+    }
+
+    /* ================= SCENE 2: BOW & ARROW LOGIC ================= */
+    const bowCanvas = document.getElementById('bowCanvas');
+    const bCtx = bowCanvas.getContext('2d');
+    let bowActive = false;
+    let isDragging = false;
+    let pullX = 0, pullY = 0;
+    let arrow = null;
+    let hitParticles = [];
+    let heartHit = false;
+    let pulsePhase = 0;
+
+    function resizeBowCanvas() {
+      bowCanvas.width = window.innerWidth;
+      bowCanvas.height = window.innerHeight;
+    }
+
+    function startBowScene() {
+      resizeBowCanvas();
+      window.addEventListener('resize', resizeBowCanvas);
+      bowActive = true;
+      heartHit = false;
+      arrow = null;
+      hitParticles = [];
+      document.getElementById('bowHintText').textContent = '🏹 Pull the bowstring back & release into the heart... well thats mine';
+      requestAnimationFrame(loopBow);
+    }
+
+    function getBowAnchor() {
+      return { x: bowCanvas.width * 0.5, y: bowCanvas.height * 0.72 };
+    }
+
+    function getTargetHeart() {
+      return { x: bowCanvas.width * 0.5, y: bowCanvas.height * 0.25, radius: 42 };
+    }
+
+    function getPointerPos(e) {
+      const rect = bowCanvas.getBoundingClientRect();
+      const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+      const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+      return { x: clientX - rect.left, y: clientY - rect.top };
+    }
+
+    bowCanvas.addEventListener('pointerdown', (e) => {
+      if (!bowActive || arrow || heartHit) return;
+      const pos = getPointerPos(e);
+      const anchor = getBowAnchor();
+      const dist = Math.hypot(pos.x - anchor.x, pos.y - anchor.y);
+      if (dist < 130) {
+        isDragging = true;
+        pullX = 0;
+        pullY = 0;
+      }
+    });
+
+    window.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      const pos = getPointerPos(e);
+      const anchor = getBowAnchor();
+      let dx = pos.x - anchor.x;
+      let dy = Math.max(10, pos.y - anchor.y);
+      const maxPull = 110;
+      const dist = Math.hypot(dx, dy);
+      if (dist > maxPull) {
+        dx = (dx / dist) * maxPull;
+        dy = (dy / dist) * maxPull;
+      }
+      pullX = dx;
+      pullY = dy;
+    });
+
+    window.addEventListener('pointerup', () => {
+      if (!isDragging) return;
+      isDragging = false;
+      const pullDist = Math.hypot(pullX, pullY);
+      if (pullDist > 25) {
+        const anchor = getBowAnchor();
+        const angle = Math.atan2(-pullY, -pullX);
+        const speed = Math.min(26, Math.max(15, pullDist * 0.26));
+        arrow = {
+          x: anchor.x + pullX,
+          y: anchor.y + pullY,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          angle: angle,
+          trail: []
+        };
+      }
+      pullX = 0;
+      pullY = 0;
+    });
+
+    function spawnBurst(x, y) {
+      const colors = ['#ff4d8d', '#ff8fab', '#ffd166', '#ffffff', '#ff0a54'];
+      for (let i = 0; i < 65; i++) {
+        const angle = Math.random() * Math.PI * 2;
+        const speed = Math.random() * 6 + 1.5;
+        hitParticles.push({
+          x, y,
+          vx: Math.cos(angle) * speed,
+          vy: Math.sin(angle) * speed,
+          size: Math.random() * 12 + 6,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          alpha: 1,
+          isHeart: Math.random() > 0.35
+        });
+      }
+    }
+
+    function loopBow() {
+      if (!bowActive) return;
+      bCtx.clearRect(0, 0, bowCanvas.width, bowCanvas.height);
+      pulsePhase += 0.06;
+
+      const target = getTargetHeart();
+      const anchor = getBowAnchor();
+
+      if (!heartHit) {
+        const pulseSize = 68 + Math.sin(pulsePhase) * 6;
+        const grad = bCtx.createRadialGradient(target.x, target.y + 25, 5, target.x, target.y + 25, 85);
+        grad.addColorStop(0, 'rgba(255, 77, 141, 0.45)');
+        grad.addColorStop(1, 'rgba(255, 77, 141, 0)');
+        bCtx.fillStyle = grad;
+        bCtx.beginPath();
+        bCtx.arc(target.x, target.y + 25, 85, 0, Math.PI * 2);
+        bCtx.fill();
+
+        drawHeart(bCtx, target.x, target.y - 10, pulseSize, '#ff4d8d', 22);
+      }
+
+      const aimAngle = isDragging ? Math.atan2(-pullY, -pullX) : -Math.PI / 2;
+      const stringTipX = anchor.x + (isDragging ? pullX : 0);
+      const stringTipY = anchor.y + (isDragging ? pullY : 12);
+
+      if (isDragging && Math.hypot(pullX, pullY) > 20) {
+        bCtx.save();
+        bCtx.strokeStyle = 'rgba(255, 209, 102, 0.35)';
+        bCtx.setLineDash([6, 8]);
+        bCtx.lineWidth = 2;
+        bCtx.beginPath();
+        bCtx.moveTo(anchor.x, anchor.y);
+        bCtx.lineTo(anchor.x + Math.cos(aimAngle) * 280, anchor.y + Math.sin(aimAngle) * 280);
+        bCtx.stroke();
+        bCtx.restore();
+      }
+
+      bCtx.save();
+      bCtx.translate(anchor.x, anchor.y);
+      bCtx.rotate(aimAngle + Math.PI / 2);
+
+      const bowWidth = 86;
+      const bowCurve = 38;
+      bCtx.strokeStyle = '#ffd166';
+      bCtx.lineWidth = 5;
+      bCtx.lineCap = 'round';
+      bCtx.shadowColor = 'rgba(255, 209, 102, 0.5)';
+      bCtx.shadowBlur = 12;
+      bCtx.beginPath();
+      bCtx.moveTo(-bowWidth, 16);
+      bCtx.quadraticCurveTo(0, -bowCurve, bowWidth, 16);
+      bCtx.stroke();
+      bCtx.restore();
+
+      const leftTipX = anchor.x + Math.cos(aimAngle + Math.PI / 2) * (-86) - Math.cos(aimAngle) * 16;
+      const leftTipY = anchor.y + Math.sin(aimAngle + Math.PI / 2) * (-86) - Math.sin(aimAngle) * 16;
+      const rightTipX = anchor.x + Math.cos(aimAngle + Math.PI / 2) * (86) - Math.cos(aimAngle) * 16;
+      const rightTipY = anchor.y + Math.sin(aimAngle + Math.PI / 2) * (86) - Math.sin(aimAngle) * 16;
+
+      bCtx.strokeStyle = 'rgba(255, 255, 255, 0.75)';
+      bCtx.lineWidth = 2;
+      bCtx.beginPath();
+      bCtx.moveTo(leftTipX, leftTipY);
+      bCtx.lineTo(stringTipX, stringTipY);
+      bCtx.lineTo(rightTipX, rightTipY);
+      bCtx.stroke();
+
+      if (!arrow && !heartHit) {
+        drawArrowSprite(bCtx, stringTipX, stringTipY, aimAngle);
+      }
+
+      if (arrow) {
+        arrow.trail.push({ x: arrow.x, y: arrow.y });
+        if (arrow.trail.length > 12) arrow.trail.shift();
+
+        arrow.x += arrow.vx;
+        arrow.y += arrow.vy;
+
+        for (let i = 0; i < arrow.trail.length; i++) {
+          const t = arrow.trail[i];
+          bCtx.fillStyle = `rgba(255, 209, 102, ${(i / arrow.trail.length) * 0.5})`;
+          bCtx.beginPath();
+          bCtx.arc(t.x, t.y, 2.5, 0, Math.PI * 2);
+          bCtx.fill();
+        }
+
+        drawArrowSprite(bCtx, arrow.x, arrow.y, arrow.angle);
+
+        const distToHeart = Math.hypot(arrow.x - target.x, arrow.y - (target.y + 20));
+        if (distToHeart < 52 && !heartHit) {
+          heartHit = true;
+          arrow = null;
+          document.getElementById('bowHintText').textContent = '💖';
+          spawnBurst(target.x, target.y + 20);
+          setTimeout(() => {
+            bowActive = false;
+            goToScene('scene-tree');
+            startHeartTreeScene();
+          }, 1250);
+        } else if (
+          arrow &&
+          (arrow.x < -50 || arrow.x > bowCanvas.width + 50 || arrow.y < -50 || arrow.y > bowCanvas.height + 50)
+        ) {
+          arrow = null;
+          document.getElementById('bowHintText').textContent = '✨ Try aiming right at the heart!';
+        }
+      }
+
+      for (let i = hitParticles.length - 1; i >= 0; i--) {
+        const p = hitParticles[i];
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.08;
+        p.alpha -= 0.016;
+        if (p.alpha <= 0) {
+          hitParticles.splice(i, 1);
+          continue;
+        }
+        bCtx.save();
+        bCtx.globalAlpha = p.alpha;
+        if (p.isHeart) {
+          drawHeart(bCtx, p.x, p.y, p.size, p.color);
+        } else {
+          bCtx.fillStyle = p.color;
+          bCtx.beginPath();
+          bCtx.arc(p.x, p.y, p.size * 0.3, 0, Math.PI * 2);
+          bCtx.fill();
+        }
+        bCtx.restore();
+      }
+
+      requestAnimationFrame(loopBow);
+    }
+
+    function drawArrowSprite(ctx, tailX, tailY, angle) {
+      ctx.save();
+      ctx.translate(tailX, tailY);
+      ctx.rotate(angle);
+      const len = 76;
+
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(len, 0);
+      ctx.stroke();
+
+      ctx.fillStyle = '#ff4d8d';
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.lineTo(-10, -7);
+      ctx.lineTo(8, 0);
+      ctx.lineTo(-10, 7);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.fillStyle = '#ffd166';
+      ctx.beginPath();
+      ctx.moveTo(len + 10, 0);
+      ctx.lineTo(len - 4, -7);
+      ctx.lineTo(len, 0);
+      ctx.lineTo(len - 4, 7);
+      ctx.closePath();
+      ctx.fill();
+
+      ctx.restore();
+    }
+
+    /* ================= SCENE 3: BLOOMING HEART TREE ================= */
+    const treeCanvas = document.getElementById('treeCanvas');
+    const tCtx = treeCanvas.getContext('2d');
+    let treeActive = false;
+    let branches = [];
+    let leafHearts = [];
+    let floatingPetals = [];
+    let treeTick = 0;
+
+    function startHeartTreeScene() {
+      treeCanvas.width = window.innerWidth;
+      treeCanvas.height = window.innerHeight;
+      treeActive = true;
+      treeTick = 0;
+      branches = [];
+      leafHearts = [];
+      floatingPetals = [];
+
+      document.getElementById('treeHeader').classList.remove('visible');
+      document.getElementById('treeFooter').classList.remove('visible');
+
+      const startX = treeCanvas.width * 0.5;
+      const startY = treeCanvas.height * 0.86;
+      const trunkLen = Math.min(135, treeCanvas.height * 0.18);
+
+      buildTreeData(startX, startY, -Math.PI / 2, trunkLen, 11, 0);
+
+      setTimeout(() => {
+        document.getElementById('treeHeader').classList.add('visible');
+      }, 450);
+
+      setTimeout(() => {
+        document.getElementById('treeFooter').classList.add('visible');
+      }, 2400);
+
+      requestAnimationFrame(loopTree);
+    }
+
+    function buildTreeData(x, y, angle, length, width, depth) {
+      const endX = x + Math.cos(angle) * length;
+      const endY = y + Math.sin(angle) * length;
+
+      branches.push({
+        x1: x, y1: y,
+        x2: endX, y2: endY,
+        width,
+        depth,
+        progress: 0,
+        delay: depth * 12
+      });
+
+      if (depth >= 4) {
+        const heartColors = ['#ff4d8d', '#ff758f', '#ff8fab', '#ffb3c6', '#ffd166', '#ff0a54'];
+        const count = depth === 5 ? 4 : 2;
+        for (let i = 0; i < count; i++) {
+          leafHearts.push({
+            x: endX + (Math.random() - 0.5) * 44,
+            y: endY + (Math.random() - 0.5) * 44,
+            targetSize: Math.random() * 14 + 10,
+            currentSize: 0,
+            color: heartColors[Math.floor(Math.random() * heartColors.length)],
+            delay: depth * 12 + Math.random() * 25,
+            bobOffset: Math.random() * Math.PI * 2
+          });
+        }
+      }
+
+      if (depth < 5) {
+        const spread = 0.38 + Math.random() * 0.14;
+        const nextLen = length * (0.76 + Math.random() * 0.08);
+        buildTreeData(endX, endY, angle - spread, nextLen, width * 0.68, depth + 1);
+        buildTreeData(endX, endY, angle + spread, nextLen, width * 0.68, depth + 1);
+      }
+    }
+
+    function loopTree() {
+      if (!treeActive) return;
+      treeTick++;
+      tCtx.clearRect(0, 0, treeCanvas.width, treeCanvas.height);
+
+      const baseX = treeCanvas.width * 0.5;
+      const baseY = treeCanvas.height * 0.86;
+      const groundGrad = tCtx.createRadialGradient(baseX, baseY, 5, baseX, baseY, 140);
+      groundGrad.addColorStop(0, 'rgba(255, 77, 141, 0.25)');
+      groundGrad.addColorStop(1, 'rgba(255, 77, 141, 0)');
+      tCtx.fillStyle = groundGrad;
+      tCtx.beginPath();
+      tCtx.ellipse(baseX, baseY, 140, 24, 0, 0, Math.PI * 2);
+      tCtx.fill();
+
+      for (const b of branches) {
+        if (treeTick < b.delay) continue;
+        if (b.progress < 1) b.progress = Math.min(1, b.progress + 0.055);
+
+        const curX = b.x1 + (b.x2 - b.x1) * b.progress;
+        const curY = b.y1 + (b.y2 - b.y1) * b.progress;
+
+        tCtx.strokeStyle = b.depth < 2 ? '#6d4c41' : '#8d6e63';
+        tCtx.lineWidth = b.width;
+        tCtx.lineCap = 'round';
+        tCtx.beginPath();
+        tCtx.moveTo(b.x1, b.y1);
+        tCtx.lineTo(curX, curY);
+        tCtx.stroke();
+      }
+
+      for (const h of leafHearts) {
+        if (treeTick < h.delay) continue;
+        if (h.currentSize < h.targetSize) {
+          h.currentSize += (h.targetSize - h.currentSize) * 0.1;
+        }
+        const bobY = Math.sin(treeTick * 0.04 + h.bobOffset) * 2.5;
+        drawHeart(tCtx, h.x, h.y + bobY, h.currentSize, h.color, 8);
+      }
+
+      if (treeTick > 70 && Math.random() < 0.08 && leafHearts.length > 0) {
+        const src = leafHearts[Math.floor(Math.random() * leafHearts.length)];
+        floatingPetals.push({
+          x: src.x,
+          y: src.y,
+          vx: (Math.random() - 0.5) * 1.2,
+          vy: Math.random() * 0.9 + 0.4,
+          size: Math.random() * 8 + 6,
+          color: src.color,
+          alpha: 0.9
+        });
+      }
+
+      for (let i = floatingPetals.length - 1; i >= 0; i--) {
+        const p = floatingPetals[i];
+        p.x += p.vx + Math.sin(treeTick * 0.03 + i) * 0.4;
+        p.y += p.vy;
+        p.alpha -= 0.004;
+        if (p.alpha <= 0 || p.y > treeCanvas.height) {
+          floatingPetals.splice(i, 1);
+          continue;
+        }
+        tCtx.save();
+        tCtx.globalAlpha = p.alpha;
+        drawHeart(tCtx, p.x, p.y, p.size, p.color);
+        tCtx.restore();
+      }
+
+      requestAnimationFrame(loopTree);
+    }
+
+    document.getElementById('toCakeBtn').addEventListener('click', () => {
+      treeActive = false;
+      goToScene('scene-cake');
+      startCakeScene();
+    });
+
+    /* ================= SCENE 4: STRAWBERRY BIRTHDAY CAKE ================= */
+    let candleReady = false;
+    let candleBlown = false;
+
+    function startCakeScene() {
+      candleReady = false;
+      candleBlown = false;
+
+      const statusEl = document.getElementById('cakeStatus');
+      const promptEl = document.getElementById('cakePrompt');
+      const blowBtn = document.getElementById('blowWishBtn');
+      const nextBtn = document.getElementById('toBalloonsBtn');
+      const flameWrap = document.getElementById('flameWrap');
+      const smokeWisp = document.getElementById('smokeWisp');
+
+      statusEl.textContent = `Baking something sweet for ${CONFIG.recipientName}...`;
+      promptEl.textContent = 'Layering strawberry sponge & whipped cream...';
+      promptEl.classList.remove('highlight');
+      blowBtn.style.display = 'none';
+      nextBtn.style.display = 'none';
+      flameWrap.classList.remove('lit');
+      smokeWisp.classList.remove('rising');
+
+      const parts = ['part-plate', 'part-bottom', 'part-filling', 'part-top', 'part-candle'];
+      parts.forEach(id => document.getElementById(id).classList.remove('dropped'));
+
+      parts.forEach((id, index) => {
+        setTimeout(() => {
+          document.getElementById(id).classList.add('dropped');
+        }, 350 + index * 380);
+      });
+
+      setTimeout(() => {
+        flameWrap.classList.add('lit');
+        launchConfetti(85);
+        candleReady = true;
+        statusEl.textContent = '✨ Make a Wish ✨';
+        promptEl.textContent = 'Close your eyes, make a wish & blow out the candle!';
+        promptEl.classList.add('highlight');
+        blowBtn.style.display = 'inline-block';
+      }, 350 + parts.length * 380 + 300);
+    }
+
+    function blowOutCandle() {
+      if (!candleReady || candleBlown) return;
+      candleBlown = true;
+
+      document.getElementById('flameWrap').classList.remove('lit');
+      const smoke = document.getElementById('smokeWisp');
+      smoke.classList.remove('rising');
+      void smoke.offsetWidth;
+      smoke.classList.add('rising');
+
+      launchConfetti(140);
+
+      document.getElementById('cakeStatus').textContent = '🌟 Wish Sent to the Stars! 🌟';
+      const promptEl = document.getElementById('cakePrompt');
+      promptEl.textContent = `May your every single dream come true, ${CONFIG.recipientName}!`;
+      promptEl.classList.remove('highlight');
+
+      document.getElementById('blowWishBtn').style.display = 'none';
+      document.getElementById('toBalloonsBtn').style.display = 'inline-block';
+    }
+
+    document.getElementById('cakeStage').addEventListener('click', blowOutCandle);
+    document.getElementById('blowWishBtn').addEventListener('click', blowOutCandle);
+
+    document.getElementById('toBalloonsBtn').addEventListener('click', () => {
+      goToScene('scene-balloons');
+      startBalloonsScene();
+    });
+
+    /* ================= SCENE 5: POP THE 5 BALLOONS (NO NUMBERS, LARGER BALLOONS) ================= */
+    let poppedCount = 0;
+
+    function startBalloonsScene() {
+      poppedCount = 0;
+      const arena = document.getElementById('balloonArena');
+      arena.innerHTML = '';
+
+      document.getElementById('balloonCounter').textContent = 'Pop the balloons';
+      document.getElementById('reasonBadge').textContent = 'Each balloon holds a little note';
+      document.getElementById('reasonText').textContent = 'Reasons you ask me for everytime ✨';
+      document.getElementById('toLetterBtn').style.display = 'none';
+
+      const balloonStyles = [
+        { bg: 'radial-gradient(circle at 30% 30%, #ff8fab, #ff0a54)', knot: '#ff0a54', left: '3%', top: '34px', delay: '0s' },
+        { bg: 'radial-gradient(circle at 30% 30%, #ffe082, #f59e0b)', knot: '#f59e0b', left: '22%', top: '10px', delay: '0.4s' },
+        { bg: 'radial-gradient(circle at 30% 30%, #c77dff, #7b2cbf)', knot: '#7b2cbf', left: '41%', top: '44px', delay: '0.8s' },
+        { bg: 'radial-gradient(circle at 30% 30%, #72efdd, #0096c7)', knot: '#0096c7', left: '60%', top: '14px', delay: '0.2s' },
+        { bg: 'radial-gradient(circle at 30% 30%, #ff758f, #c9184a)', knot: '#c9184a', left: '79%', top: '36px', delay: '0.6s' }
+      ];
+
+      CONFIG.balloonReasons.forEach((reason, idx) => {
+        const style = balloonStyles[idx % balloonStyles.length];
+        const item = document.createElement('div');
+        item.className = 'balloon-item';
+        item.style.left = style.left;
+        item.style.top = style.top;
+        item.style.animationDelay = style.delay;
+
+        const body = document.createElement('div');
+        body.className = 'balloon-body';
+        body.style.background = style.bg;
+        body.style.color = style.knot;
+
+        const string = document.createElement('div');
+        string.className = 'balloon-string';
+
+        item.appendChild(body);
+        item.appendChild(string);
+
+        item.addEventListener('click', () => {
+          if (item.classList.contains('popped')) return;
+          item.classList.add('popped');
+          poppedCount++;
+
+          const rect = item.getBoundingClientRect();
+          launchConfetti(32, rect.left + rect.width / 2, rect.top + rect.height / 3);
+
+          document.getElementById('balloonCounter').textContent = 'Keep popping... ✨';
+          document.getElementById('reasonBadge').textContent = '💖';
+          document.getElementById('reasonText').textContent = reason;
+
+          const card = document.getElementById('reasonCard');
+          card.classList.remove('pop-in');
+          void card.offsetWidth;
+          card.classList.add('pop-in');
+
+          if (poppedCount === CONFIG.balloonReasons.length) {
+            setTimeout(() => {
+              document.getElementById('balloonCounter').textContent = '✨✨';
+              document.getElementById('toLetterBtn').style.display = 'inline-block';
+            }, 400);
+          }
+        });
+
+        arena.appendChild(item);
+      });
+    }
+
+    document.getElementById('toLetterBtn').addEventListener('click', () => {
+      goToScene('scene-letter');
+      startLetterScene();
+    });
+
+    /* ================= SCENE 6: SEALED ENVELOPE & TYPEWRITER LETTER ================= */
+    let envelopeOpened = false;
+    let typeTimer = null;
+
+    function startLetterScene() {
+      envelopeOpened = false;
+      clearInterval(typeTimer);
+
+      const envBox = document.getElementById('envelopeBox');
+      const card = document.getElementById('stationeryCard');
+      envBox.style.display = 'flex';
+      envBox.classList.remove('opened');
+      card.classList.remove('visible');
+
+      document.getElementById('letterHeading').textContent = 'Tap the Wax Seal to Open';
+      document.getElementById('typedBody').textContent = '';
+      document.getElementById('typeCursor').style.display = 'inline-block';
+      document.getElementById('letterSignoff').classList.remove('visible');
+      document.getElementById('toVideoBtn').style.display = 'none';
+    }
+
+    document.getElementById('envelopeBox').addEventListener('click', () => {
+      if (envelopeOpened) return;
+      envelopeOpened = true;
+
+      const envBox = document.getElementById('envelopeBox');
+      envBox.classList.add('opened');
+      launchConfetti(60);
+
+      setTimeout(() => {
+        envBox.style.display = 'none';
+        document.getElementById('letterHeading').textContent = 'For You, Always 💌';
+        document.getElementById('stationeryCard').classList.add('visible');
+        startTypewriter();
+      }, 650);
+    });
+
+    function startTypewriter() {
+      const fullText = CONFIG.letterBody;
+      const targetEl = document.getElementById('typedBody');
+      let index = 0;
+
+      typeTimer = setInterval(() => {
+        if (index < fullText.length) {
+          targetEl.textContent += fullText.charAt(index);
+          index++;
+        } else {
+          finishTypewriter();
+        }
+      }, 34);
+    }
+
+    function finishTypewriter() {
+      clearInterval(typeTimer);
+      document.getElementById('typedBody').textContent = CONFIG.letterBody;
+      document.getElementById('typeCursor').style.display = 'none';
+      document.getElementById('letterSignoff').classList.add('visible');
+      document.getElementById('toVideoBtn').style.display = 'inline-block';
+    }
+
+    document.getElementById('toVideoBtn').addEventListener('click', () => {
+      goToScene('scene-video');
+      startVideoScene();
+    });
+
+    /* ================= SCENE 7: DECORATIVE KITTEN BAND VIDEO (AUTO-PLAY & AUTO-ADVANCE) ================= */
+    const surpriseVideo = document.getElementById('surpriseVideo');
+
+    function startVideoScene() {
+      wasPlayingBeforeVideo = isPlaying;
+      if (isPlaying) {
+        bgMusic.pause();
+      }
+
+      surpriseVideo.currentTime = 0;
+      surpriseVideo.muted = false;
+      surpriseVideo.play().catch(() => {
+        // Fallback if mobile browser requires muted start, unmuting on first tap
+        surpriseVideo.muted = true;
+        surpriseVideo.play().catch(() => {});
+      });
+    }
+
+    function endVideoAndGoFinale() {
+      surpriseVideo.pause();
+      if (wasPlayingBeforeVideo) {
+        bgMusic.play().catch(() => {});
+      }
+      goToScene('scene-finale');
+      startFinaleScene();
+    }
+
+    surpriseVideo.addEventListener('ended', endVideoAndGoFinale);
+
+    /* ================= SCENE 8: GRAND FINALE WITH CAT IMAGE ================= */
+    let finaleInterval = null;
+
+    function startFinaleScene() {
+      launchConfetti(140);
+      clearInterval(finaleInterval);
+      finaleInterval = setInterval(() => {
+        if (!document.getElementById('scene-finale').classList.contains('active')) {
+          clearInterval(finaleInterval);
+          return;
+        }
+        launchConfetti(45, Math.random() * window.innerWidth, window.innerHeight * 0.35);
+      }, 2400);
+    }
+
+    document.getElementById('replayBtn').addEventListener('click', () => {
+      clearInterval(finaleInterval);
+      enteredPin = "";
+      updateDots();
+      goToScene('scene-pin');
+    });
+  </script>
+</body>
+</html>
